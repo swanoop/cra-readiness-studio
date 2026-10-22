@@ -2,7 +2,7 @@ name: Import independent CRA Readiness Studio source
 on:
   push:
     branches: [main]
-    paths: ['.publication/source.zip']
+    paths: ['.publication/**']
   workflow_dispatch:
 permissions:
   contents: write
@@ -25,7 +25,7 @@ jobs:
           unzip -q .publication/source.zip -d "$tmp"
           cp -a "$tmp"/. .
           rm -rf .publication
-          rm -f .github/workflows/bootstrap-import.yml
+          rm -f .github/workflows/verify.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
