@@ -1,0 +1,7 @@
+node_modules/
+*.backup.json
+*assessment*.json
+!examples/*.json
+playwright-report/
+test-results/
+.DS_Store
