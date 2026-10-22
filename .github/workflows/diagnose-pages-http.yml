@@ -1,0 +1,41 @@
+name: Diagnose CRA Pages 404
+
+on:
+  push:
+    branches:
+      - diagnose-pages-404-20261023
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-http-diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe public GitHub Pages endpoints
+        shell: bash
+        run: |
+          set +e
+          for url in \
+            "https://swanoop.github.io/" \
+            "https://swanoop.github.io/cra-readiness-studio/" \
+            "https://swanoop.github.io/cra-readiness-studio/index.html" \
+            "https://swanoop.github.io/cra-readiness-studio/assets/styles.css" \
+            "https://swanoop.github.io/cra-readiness-studio/?diagnostic=20261023"; do
+            echo "::group::$url"
+            curl -L -sS -D /tmp/headers -o /tmp/body --connect-timeout 12 --max-time 30 -w 'HTTP_STATUS=%{http_code} CONTENT_TYPE=%{content_type} FINAL_URL=%{url_effective}\n' "$url"
+            grep -iE '^(HTTP/|server:|location:|x-github-|cache-control:|content-type:|x-served-by:)' /tmp/headers | tail -20
+            echo "BODY_PREFIX:"
+            head -c 160 /tmp/body | tr '\n' ' '
+            echo
+            echo "::endgroup::"
+          done
+      - name: Read public Pages configuration
+        shell: bash
+        run: |
+          curl -sS -D /tmp/pages-headers -o /tmp/pages-response -w 'PAGES_API_STATUS=%{http_code}\n' \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/swanoop/cra-readiness-studio/pages'
+          head -c 2000 /tmp/pages-response
+          echo
