@@ -1,65 +1,64 @@
-# CRA Readiness Studio
+# CRA Assurance Workbench
+**Evidence-led product cybersecurity assessment · Local-first · EU Cyber Resilience Act**
 
-A local-first cybersecurity assurance workspace for products with digital elements under **Regulation (EU) 2024/2847 (Cyber Resilience Act)**.
+An offline-first assessment workspace for manufacturers, product security engineers and assurance reviewers working with **Regulation (EU) 2024/2847**. The workbench brings scope, assessor decisions, evidence, risks, corrective actions, incident planning and reporting into one product record.
 
-**Release:** 0.9.0-beta · **Theme:** deep navy, forest green and teal · **Hosting:** static files, no runtime installation.
+> **Beta 0.9.1.** This is an assessor aid, not a certified legal interpretation, vulnerability scanner, declaration of conformity, or regulatory notification service. Use fictional or non-sensitive data for evaluation. The user remains responsible for verifying applicable law and every conclusion.
 
-The workspace connects product applicability, security assessment, maturity, vulnerabilities, component inventory, evidence, risk treatment, remediation, version reviews and technical documentation into a single traceable product record.
+## Working with an assessment
 
-## Included modules
+1. **Product & scope:** describe the product, operator role, intended use, applicable market and preliminary category. Record the rationale; the category is not automatically determined.
+2. **Assessment:** review the 118 editorial CRA prompts. Record status, rationale and reviewer rather than treating a percentage as a conformity conclusion.
+3. **Evidence:** add the references, links to requirements and review states that substantiate decisions.
+4. **Risks & actions:** track security risks, gaps, owners, deadlines and resolution.
+5. **Release review:** inspect gaps and missing technical file references before recording a release decision.
+6. **Reports & exports:** export individual CSV registers, an executive or detailed branded A4 report (browser **Print → Save as PDF**) and a complete JSON backup.
 
-| Capability | Implemented scope |
-| --- | --- |
-| Product applicability | EU market, operator role, digital-product, commercial supply and exclusion screening; reviewer rationale and preliminary category |
-| CRA assessment | **118 editorial prompts in 11 domains** with internal legal references, status, rationale and reviewer |
-| Professional maturity | **150 controls in 15 domains**, each with five defined maturity descriptions (**750 assessment anchors**) |
-| SME maturity | **25 additional practices** with current/target levels |
-| Technical traceability | Linked requirements, risk scenarios, evidence, accepted evidence and actions |
-| Evidence review | References, descriptions, requirement IDs and manual review/acceptance states |
-| STRIDE risks | Threat scenario, inherent and residual likelihood/impact and risk acceptance |
-| Remediation | Kanban workflow, ownership, due dates and action generation from recorded gaps |
-| Vulnerability management | Local vulnerability register, affected components, exploit evidence, severity, status and release flags |
-| SBOM | Offline imports of CycloneDX JSON and SPDX JSON; component inventory (not a CVE scanner) |
-| Article 14 planning | Local calculation of staged reporting dates, subject to human confirmation of reportability |
-| Product release | Version-labelled assessment snapshots, changed requirement outcomes and unresolved review conditions |
-| Annex VII documentation | Technical documentation reference register and printable draft assessment file |
-| Portability | Plain JSON and password-encrypted JSON backups (AES-256-GCM, PBKDF2); CSV assessment export |
+Advanced modules are available for SBOM import, draft maturity planning, incident timelines, traceability, vulnerabilities and technical documentation.
 
-## Run locally
+## Start locally
 
-Requirements: a modern browser. No cloud account, API key, framework, database or build process is required.
+Requires a modern desktop browser and Python 3 or another static HTTP server. No npm dependencies are required to run the web interface.
 
-- **Windows:** run `START-WINDOWS.bat` with Python 3 installed.
-- **macOS/Linux:** run `sh start-local.sh` with Python 3 installed.
-- Open the localhost address printed by the script.
-- **Optional tests:** Node.js 20+ and `npm test`.
+```bash
+git clone https://github.com/swanoop/cra-readiness-studio.git
+cd cra-readiness-studio
+python3 -m http.server 8765 --bind 127.0.0.1
+```
 
-Keep **all** files together when publishing, particularly `index.html`, `src/`, `assets/` and `.nojekyll`. There are no embedded links to external websites in the application and no outbound network requests from its runtime code. Legal references are displayed as statute names and article/annex identifiers, not website links.
+Open **http://127.0.0.1:8765**. The application stores records in this browser's localStorage. Create a product or import the fictional `examples/industrial-gateway.json` through **Data & settings**.
 
-## Evidence, security and legal boundaries
+To run the test suite:
 
-- **The app does not certify a product or declare CRA conformity.** Assessment coverage, security maturity, accepted evidence references and unresolved risks are distinct metrics.
-- The catalogue contains **118 review prompts** but is **not a legally verified, one-to-one reproduction of any previous questionnaire or a warranty of complete regulatory applicability**. It requires clause-level expert review before formal use.
-- The **150-control/750-anchor professional maturity model** is a newly authored operational framework, not the text of an official third-party model. Likewise, the 25-practice SME assessment is an internal model.
-- The app does **not** perform security scanning, vulnerability-feed lookup, SBOM completeness verification, conformity assessment, regulatory notification, or independent evidence verification.
-- Working data is stored in browser `localStorage`, which is **not encrypted at rest** and is not intended for sensitive client evidence. Encrypted JSON exports protect the exported file, not the live browser workspace.
-- Static publishing exposes app source files. Do **not** publish customer evidence, imported SBOMs, credentials, or workspace backup files in a public repository.
-- Legacy schema-1 imports retain original answers separately for review, without claiming a reliable automatic mapping to the new regulatory catalogue.
+```bash
+npm test
+```
 
-**Regulatory baseline for review:** Regulation (EU) 2024/2847, Implementing Regulation (EU) 2025/2392, and the Commission's CRA implementation guidance dated 27 July 2026. Article 14 reporting began applying on 11 September 2026; the main CRA requirements generally apply from 11 December 2027. This statement reflects sources checked in October 2026 and must be reviewed as laws and guidance evolve.
+## Portable and private by design
 
-## Verification
+The application does not call external APIs. JSON backups remain compatible with historical workspace schema 1 through a review-only migration, and the on-disk browser workspace keeps its original storage key for existing users.
 
-`npm test` verifies the catalogue structure, representative assessment logic, backup validation, encryption roundtrips, reporting deadlines, SBOM parsing, escaping, no external-link/legacy-brand strings in app source, and simulated rendering of all modules.
+Password-protected backups use **AES-256-GCM**, fresh random salt/nonce and PBKDF2-HMAC-SHA256 at **600,000 iterations** for version 2. Historical 250,000-iteration version 1 backup files remain readable. This protects exported files; it does **not** encrypt the live localStorage workspace. Do not store client secrets or sensitive records without an approved organisational storage policy.
 
-**Status:** 18 tests passed in the build environment. An in-memory Chromium browser test passed representative user flows and produced current desktop, mobile and maturity screenshots. URL-served ES-module verification, cross-browser QA, accessibility review, a security assessment and expert legal content review have **not** been completed for this beta release; direct browser navigation to localhost/file URLs was blocked by the environment.
+## SBOM and reporting scope
 
-## Publishing
+SBOM import is local and intentionally **not a full schema validator**. It extracts CycloneDX JSON, SPDX 2.x JSON and preliminary SPDX 3.x JSON-LD package information, direct dependency links, hashes, suppliers and licences. The field-presence indicator is informative; it is **not** a BSI TR-03183-2 compliance score.
 
-See [`docs/PUBLISHING.md`](docs/PUBLISHING.md) for the new-repository workflow. Use a **new repository with new Git history**; no merges, forks or pull requests against any existing product repository are needed.
+The Article 14 planner calculates 24-hour and 72-hour milestones and applies the distinct final-report triggers for exploited vulnerabilities and severe incidents. Dates entered in the browser are normalised to UTC for stored records. The tool does not verify reporting triggers or transmit reports to ENISA.
 
-## Documentation
+## Regulatory baseline and content limitations
 
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — data flow, trust boundaries and modules.
-- [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md) — verified features and release gates.
-- [`docs/PUBLISHING.md`](docs/PUBLISHING.md) — clean-repository publication.
+- Regulation (EU) 2024/2847: essential CRA requirements and Annexes
+- Implementing Regulation (EU) 2025/2392: technical descriptions of important and critical product categories
+- Commission communication **C(2026) 5252**, Annex, 27 July 2026: non-binding CRA implementation guidance
+- ENISA Single Reporting Platform and official Commission reporting guidance
+
+See [research and source record](docs/RESEARCH_SOURCES.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). The main Annex I references are retained, and 84 additional prompts have been rewritten as product-specific assessor questions. Every regulatory mapping still requires an independent legal/editorial review before production use.
+
+The concise 25-practice maturity track is shown first. The 150-control, 750-anchor **extended draft rubric is experimental**, is not derived from an official ENISA maturity model, and has not yet been independently validated.
+
+## Security and contributions
+
+See [SECURITY.md](SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md). Licensed under [Apache-2.0](LICENSE).
+
+**Not suitable for autonomous conformity judgments, regulated client records, or reliance as legal advice.**

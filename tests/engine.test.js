@@ -87,3 +87,11 @@ test('not-applicable decisions without rationale do not count as assessed',()=>{
  p.requirements['A1-01'].notes='No corresponding product function; confirmed through interface inventory.';
  assert.equal(requirementMetrics(p).assessed,1);
 });
+
+test('Article 14 final report uses timezone-stable calendar months',()=>{
+ const d=reportingDeadlines({kind:'incident',awareness:'2026-01-31T01:00:00+01:00',notification:'2026-01-31T09:00:00+01:00'});
+ assert.equal(d.early.toISOString(),'2026-02-01T00:00:00.000Z');
+ assert.equal(d.final.toISOString(),'2026-02-28T08:00:00.000Z');
+ const leap=reportingDeadlines({kind:'incident',awareness:'2028-01-31T00:00:00Z',notification:'2028-01-31T10:00:00Z'});
+ assert.equal(leap.final.toISOString(),'2028-02-29T10:00:00.000Z');
+});

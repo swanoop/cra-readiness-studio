@@ -1,0 +1,72 @@
+{
+  "schema": 2,
+  "productId": "demo-gateway",
+  "updated": "2026-11-19T00:00:00Z",
+  "products": [
+    {
+      "id": "demo-gateway",
+      "name": "Industrial Edge Gateway — fictional example",
+      "version": "1.0",
+      "organisation": "Example Engineering Ltd",
+      "owner": "Product Security Team",
+      "assessor": "Example Reviewer",
+      "purpose": "Fictional gateway connecting process control and enterprise services.",
+      "role": "manufacturer",
+      "eu": "yes",
+      "digital": "yes",
+      "commercial": "yes",
+      "exemption": "no",
+      "category": "unconfirmed",
+      "placed": "",
+      "supportEnd": "",
+      "scopeRationale": "Example only. Classification, market exposure and legal scope require independent review.",
+      "created": "2026-11-19T00:00:00Z",
+      "updated": "2026-11-19T00:00:00Z",
+      "requirements": {
+        "A1-01": {
+          "status": "partial",
+          "notes": "Initial threat model exists; remote dependency assurance not completed.",
+          "reviewer": "Example Reviewer"
+        },
+        "A1-05": {
+          "status": "gap",
+          "notes": "Administrative access hardening test evidence outstanding.",
+          "reviewer": "Example Reviewer"
+        }
+      },
+      "maturity": {},
+      "evidence": [
+        {
+          "id": "sample_evidence_1",
+          "title": "Gateway architecture",
+          "reference": "DEMO-ARCH-001",
+          "description": "Illustrative architecture reference only.",
+          "requirementIds": [
+            "A1-01"
+          ],
+          "review": "referenced"
+        }
+      ],
+      "risks": [],
+      "actions": [
+        {
+          "id": "sample_action_1",
+          "title": "Verify administrator access restrictions",
+          "description": "Review credentials, MFA and access paths.",
+          "owner": "Product Security Team",
+          "due": "",
+          "status": "open",
+          "requirementIds": [
+            "A1-05"
+          ]
+        }
+      ],
+      "vulnerabilities": [],
+      "releases": [],
+      "components": [],
+      "documents": {},
+      "incident": {},
+      "legacy": {}
+    }
+  ]
+}

@@ -1,28 +1,28 @@
-# Release status — 0.9.0-beta · 22 October 2026
+# Implementation status — CRA Assurance Workbench 0.9.1-beta
 
-## Implemented
+## Implemented in this iteration
+- Guided workflow and simplified navigation, with advanced modules under an expandable section
+- Independent product and organisation branding; draft A4 executive or detailed report via browser print-to-PDF
+- CSV registers for requirements, evidence, risk, actions, vulnerabilities and SBOM
+- Rewritten 84 expanded editorial questions retaining original identifiers and legal references
+- Version 2 encrypted backup with authenticated KDF metadata and backward-compatible v1 decrypt
+- More complete offline SBOM component metadata and basic dependency extraction
+- UTC-normalised date storage for incident planner and calendar-month final-report handling
+- Updated official reference record, repository documentation and syntax/test coverage
 
-- 118 editorial CRA readiness prompts across 11 review domains.
-- Professional 150-control maturity catalogue, 750 level descriptions, plus separate 25-practice SME view.
-- Product scoping, operator role screening, versioning and category selection.
-- Evidence linking/approval status, requirement traceability, STRIDE-based risk register, residual risk, automatic gap-to-action creation and remediation Kanban.
-- Local vulnerability register, manual exploitation evidence, severity and release warning flags.
-- CycloneDX/SPDX component import, reporting-deadline planner and Annex VII documentation reference register.
-- Release snapshots and difference summaries, printable report, CSV export, JSON backup and encrypted JSON backup/import.
-- Responsive navy/teal/green interface; no outbound website links or former-brand promotional references in application source.
+## Preserved capabilities
+118 editorial CRA assessment prompts, 25 SME maturity practices, 150 draft extended controls,
+traceability, local records, technical file references, gap-to-action tracking and workspace import/export.
 
-## Automated checks
+## Important limitations
+- **Legal:** All prompts and mappings remain editorial aids pending expert review; no automated conformity determination
+- **Maturity:** 750 generic extended rubric anchors remain draft. Do not represent these as a validated industry/ENISA model
+- **SBOM:** Partial extraction of common CycloneDX and SPDX JSON structures; no complete JSON Schema validation, no BSI conformance score, no CVE matching
+- **Storage:** The live workspace remains in browser localStorage. Encryption protects portable backup exports only; no IndexedDB or per-project at-rest encryption yet
+- **Reporting:** Timezone and deadline tests cover common cases, but legal triggers, exceptions and actual submissions need review
+- **QA:** Additional regression checks were added; full URL-served browser QA across Chromium, Firefox and WebKit, keyboard accessibility, axe and independent penetration testing remain outstanding
+- **Documentation:** The A4 report is a draft assessment record, not an Annex VII compliant package, Annex V declaration or other regulatory filing
 
-18 automated tests passed for core structures, calculations, schemas, encryption and simulated UI module rendering. A Chromium in-memory application preview also completed product creation, assessment updates, automatic gap-action creation, and both maturity tracks without JavaScript errors; desktop/mobile screenshots were captured.
-
-## Critical review gates remaining
-
-1. Verify **all** editorial control text and role applicability against current law and official implementing material. The 118-control count is not a guarantee of legal completeness, and professional maturity level anchors are newly authored rather than an adopted standard.
-2. Run a real URL-served end-to-end browser QA matrix across desktop/mobile, Chromium/Firefox/Safari, keyboard navigation, accessibility and printing. Direct navigation to localhost and local files was blocked, so the passing Chromium check used in-memory bundled application content rather than the final published ES-module site.
-3. Conduct test-backed, end-to-end migration review on representative historic workspaces and imported SBOM data.
-4. Review sector-specific product category logic and conformity route guidance; the current engine **screens** applicability and does not determine conformity pathways automatically.
-5. Review date/timezone edge cases with regulatory counsel for Article 14 and output localisation.
-6. Perform threat modelling, dependency and application security review before working with sensitive client records.
-7. Obtain independent user acceptance testing with real product security practitioners.
-
-This beta is suitable for controlled evaluation with **fictional/non-sensitive records**, not for a final conformity judgement or unsupervised production assessment.
+## Release bar
+Remain in beta until independent product-security practitioners validate the editorial content and maturity rubrics,
+testing covers all supported browser/backup paths, and security/accessibility reviews pass.

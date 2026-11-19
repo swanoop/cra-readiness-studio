@@ -27,7 +27,35 @@ export function riskRating(likelihood,impact){const n=Number(likelihood)*Number(
 export function releaseReview(p){const m=requirementMetrics(p),out=[];if(!p.scopeRationale?.trim())out.push('Document the product applicability and scope rationale.');if(p.category==='unconfirmed')out.push('Confirm the product category and conformity assessment pathway.');if(scope(p).status!=='Potentially in scope')out.push('Resolve scope and operator role through qualified review.');if(m.coverage<100)out.push(`Assess the remaining ${m.total-m.assessed} checklist prompts.`);if(m.criticalOpen)out.push(`Disposition ${m.criticalOpen} unresolved priority prompts.`);const unjustified=relevantRequirements(p).filter(r=>p.requirements[r.id]?.status==='not-applicable'&&String(p.requirements[r.id].notes||'').trim().length<10).length;if(unjustified)out.push(`Document ${unjustified} unsupported not-applicable decisions.`);const unsupported=relevantRequirements(p).filter(r=>p.requirements[r.id]?.status==='implemented'&&!p.evidence.some(e=>(e.requirementIds||[]).includes(r.id)&&e.review==='accepted')).length;if(unsupported)out.push(`Review ${unsupported} implementation claims without accepted evidence references.`);if(!p.risks.length)out.push('Record a product cybersecurity risk assessment.');if(p.risks.some(r=>r.acceptance!=='accepted'&&Number(r.residualLikelihood||1)*Number(r.residualImpact||1)>=10))out.push('Review high/critical residual risks before sign-off.');if(p.actions.some(a=>a.status!=='closed'))out.push('Resolve or explicitly disposition open actions.');const unresolved=(p.vulnerabilities||[]).filter(v=>['open','investigating','fix-in-progress'].includes(v.status)&&['critical','high'].includes(v.severity));if(unresolved.length)out.push(`Review ${unresolved.length} unresolved high/critical product vulnerability records.`);const missing=DOCS.filter(d=>!p.documents[d.id]?.reference?.trim()).map(x=>x.label);if(missing.length)out.push(`Review ${missing.length} missing technical documentation references.`);return{issues:out,missingDocs:missing,ready:out.length===0};}
 export function createSnapshot(p,label){const x={id:uid(),date:new Date().toISOString(),label,version:p.version,requirements:structuredClone(p.requirements),metrics:requirementMetrics(p),riskCount:p.risks.length,actionOpen:p.actions.filter(a=>a.status!=='closed').length};return x;}
 export function compareSnapshot(p,s){return relevantRequirements(p).flatMap(r=>{const before=s.requirements?.[r.id]?.status||'not-assessed',after=p.requirements[r.id]?.status||'not-assessed';return before===after?[]:[{id:r.id,title:r.title,before,after}];});}
-export function reportingDeadlines(incident){if(!incident.awareness)return null;const time=new Date(incident.awareness);if(Number.isNaN(time.getTime()))return null;const afterHrs=h=>new Date(time.getTime()+h*3600000);let final=null;if(incident.kind==='vulnerability'&&incident.remedy){const d=new Date(incident.remedy);if(!Number.isNaN(+d)) final=new Date(+d+14*86400000)}if(incident.kind==='incident'&&incident.notification){const d=new Date(incident.notification);if(!Number.isNaN(+d)){const day=d.getDate(),hour=d.getHours(),minute=d.getMinutes();const n=new Date(d.getFullYear(),d.getMonth()+2,0);n.setDate(Math.min(day,n.getDate()));n.setHours(hour,minute,0,0);final=n;}}return{early:afterHrs(24),notification:afterHrs(72),final};}
+// Inputs must carry a timezone (Z or +/-HH:MM) or be local date-time form values.
+// Local date-times are interpreted in the user's browser timezone and should be
+// normalised to ISO UTC at the UI boundary when saved.
+export function reportingDeadlines(incident) {
+  if (!incident?.awareness) return null;
+  const at = value => {
+    if (!value || typeof value !== 'string') return null;
+    const d = new Date(value);
+    return Number.isFinite(d.getTime()) ? d : null;
+  };
+  const awareness = at(incident.awareness);
+  if (!awareness) return null;
+  const afterHours = hours => new Date(awareness.getTime() + hours * 3600000);
+  let final = null;
+  if (incident.kind === 'vulnerability') {
+    const remedy = at(incident.remedy);
+    if (remedy) final = new Date(remedy.getTime() + 14 * 86400000);
+  } else if (incident.kind === 'incident') {
+    const notification = at(incident.notification);
+    if (notification) {
+      const y=notification.getUTCFullYear(), m=notification.getUTCMonth();
+      const d=notification.getUTCDate(), hour=notification.getUTCHours(), minute=notification.getUTCMinutes();
+      const second=notification.getUTCSeconds(), milli=notification.getUTCMilliseconds();
+      const daysInNextMonth=new Date(Date.UTC(y,m+2,0)).getUTCDate();
+      final=new Date(Date.UTC(y,m+1,Math.min(d,daysInNextMonth),hour,minute,second,milli));
+    }
+  }
+  return {early:afterHours(24),notification:afterHours(72),final};
+}
 export function safeText(input){return String(input??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 export function isoDate(date){return date?new Date(date).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'}):'—'};
 

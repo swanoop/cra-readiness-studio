@@ -1,33 +1,31 @@
-# Architecture and security boundaries
+# Architecture and trust boundaries
 
-The application is static ES modules and CSS, with no runtime dependencies, backend, authentication provider or external web traffic.
+**CRA Assurance Workbench** is a static ES-module application designed for local use. It does not require a backend, account, cloud API or analytics service.
 
-| File / module | Responsibility |
+## Modules
+| File | Purpose |
 | --- | --- |
-| `index.html` | Application shell |
-| `assets/styles.css` | Responsive navy/green/teal user interface |
-| `src/data.js` | Core review prompts, documents, 25-practice SME maturity set |
-| `src/regulatory-expanded.js` | Supplemental CRA prompts, together giving 118 across 11 domains |
-| `src/professional-maturity.js` | 150 controls, 15 domains, 5 maturity anchors per control |
-| `src/engine.js` | Scope screening, metrics, release findings, snapshots, reporting dates |
-| `src/sbom.js` | Offline JSON component parsing |
-| `src/secure-backup.js` | Web Crypto based AES-256-GCM encrypted backup format |
-| `src/store.js` | JSON validation, local storage and migration-preserving imports |
-| `src/app.js` | Application UI, review inputs, exports and user interactions |
-| `tests/` | Domain, security, schema and UI-render unit tests |
+| `index.html`, `assets/styles.css` | Accessible application shell, compact navigation, focused assessment layout |
+| `src/app.js` | UI state, workflows, views and user input handling |
+| `src/data.js`, `src/regulatory-expanded.js` | Editorial CRA assessment catalogue, with stable IDs |
+| `src/professional-maturity.js` | Extended draft maturity catalogue; not a validated standard |
+| `src/engine.js` | Scope screening, assessment metrics, release-review checks and Article 14 dates |
+| `src/store.js` | Local workspace storage, backup schema validation and legacy import |
+| `src/secure-backup.js` | Portable backup encryption v2 / legacy v1 decryption |
+| `src/sbom.js` | Best-effort offline CycloneDX and SPDX package/relationship extraction |
+| `src/exports.js` | CSV escaping and A4 executive/detailed report templates |
+| `tests/` | Engine, parsing, encryption, export, and lightweight UI regression tests |
 
-## Data flow
+## Data and trust flow
+User-entered product data and uploaded SBOM → validation → in-memory app state → browser-local storage.
+The user may export ordinary JSON, password-protected JSON, CSV registers or print an HTML report to PDF.
 
-User-entered product records and imported SBOM metadata → validation → in-memory workspace → browser-local storage. On demand, the user may export a regular JSON backup, a password-encrypted backup, CSV tables or a printable summary. There is no automatic cloud sync or transmission of product details.
+Browser localStorage is plaintext. Password encryption applies to portable files only and is **not** equivalent to at-rest encryption of the live workspace. The application does not transmit records to the European Commission, ENISA or any vendor.
 
-## Security and quality constraints
+## Assurance boundary
+Assessment answers, imported SBOM metadata and evidence references are unverified user input until reviewed by an accountable assessor.
+The tool does not claim Annex VII completeness, standards conformity, live vulnerability enrichment or security certification.
+All printable reports include an assessment-draft disclaimer.
 
-- `localStorage` is plaintext under the user's browser origin and can be lost when browser data is cleared. Use fictional/sample data on public demo sites.
-- AES-GCM backup uses a random salt, 250,000 PBKDF2-HMAC-SHA-256 iterations, a random nonce and an authenticated ciphertext. No password recovery service exists; losing the password makes the export unrecoverable.
-- JSON import validates known structure and identifiers, but users must still review source provenance and content.
-- Printable reports repeat user-supplied content; no legal conformity or evidence sufficiency is inferred.
-- Vulnerability status and incident reportability are manual, and SBOM imports do not perform CVE lookup.
-- Historical data import is isolated, with no invented regulatory equivalence mapping.
-- The site has no external hyperlinks, tracking pixels, fonts, API calls, or sponsored branding.
-
-Before sensitive industrial client use, add secure authentication, access control, versioned audit events, encryption at rest, trusted evidence storage, backup recovery controls and independent penetration/security testing in an appropriately governed deployment.
+## Future engineering
+IndexedDB project persistence with optional at-rest encryption, a formal domain content schema, independent editorial review, and a complete Playwright cross-browser/accessibility matrix remain planned.
