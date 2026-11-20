@@ -4,7 +4,7 @@ Reviewed: **19 November 2026**. Sources and notes are reference material, not le
 ## Official legislative and interpretive sources
 - **Regulation (EU) 2024/2847** (Cyber Resilience Act) — https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847
 - **Implementing Regulation (EU) 2025/2392** (important and critical product category descriptions) — https://eur-lex.europa.eu/eli/reg_impl/2025/2392/oj
-- **Commission guidance C(2026) 5252, Annex**, 27 July 2026, non-binding — https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation
+- **Commission Communication C/2026/6013**, published in the Official Journal on 17 November 2026, non-binding; content previously approved in July as C(2026) 5252 — https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026XC06013
 - **Commission CRA conformity assessment overview** — https://digital-strategy.ec.europa.eu/en/policies/cra-conformity-assessment
 - **Commission CRA reporting obligations** — https://digital-strategy.ec.europa.eu/en/policies/cra-reporting
 
