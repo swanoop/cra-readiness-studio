@@ -45,9 +45,55 @@
             "A1-01"
           ],
           "review": "referenced"
+        },
+        {
+          "id": "sample_evidence_2",
+          "title": "Fictional firmware update test",
+          "reference": "DEMO-TST-002",
+          "description": "Illustrative evidence reference only; no real verification was performed.",
+          "requirementIds": [
+            "A1-04",
+            "VH-02"
+          ],
+          "review": "referenced"
         }
       ],
-      "risks": [],
+      "risks": [
+        {
+          "id": "sample_risk_1",
+          "title": "Unauthorised administrator access",
+          "stride": "Spoofing",
+          "scenario": "A fictional management interface might allow unauthorised configuration changes.",
+          "requirementIds": [
+            "A1-05",
+            "A1-11"
+          ],
+          "likelihood": 3,
+          "impact": 4,
+          "residualLikelihood": 2,
+          "residualImpact": 3,
+          "treatment": "Require stronger authentication, isolate management traffic and verify role restrictions.",
+          "owner": "Example Security Team",
+          "acceptance": "open"
+        },
+        {
+          "id": "sample_risk_2",
+          "title": "Firmware update interrupted",
+          "stride": "Tampering",
+          "scenario": "A hypothetical interrupted update could render the gateway unavailable.",
+          "requirementIds": [
+            "A1-04",
+            "A1-09"
+          ],
+          "likelihood": 3,
+          "impact": 3,
+          "residualLikelihood": 2,
+          "residualImpact": 2,
+          "treatment": "Demonstrate signed firmware and recovery behaviour.",
+          "owner": "Example Firmware Team",
+          "acceptance": "open"
+        }
+      ],
       "actions": [
         {
           "id": "sample_action_1",
@@ -59,13 +105,110 @@
           "requirementIds": [
             "A1-05"
           ]
+        },
+        {
+          "id": "sample_action_2",
+          "title": "Verify firmware rollback",
+          "description": "Test power-loss recovery and document the acceptance criteria.",
+          "owner": "Example Firmware Team",
+          "due": "",
+          "status": "in-progress",
+          "requirementIds": [
+            "A1-04",
+            "A1-09"
+          ]
         }
       ],
-      "vulnerabilities": [],
-      "releases": [],
-      "components": [],
-      "documents": {},
-      "incident": {},
+      "vulnerabilities": [
+        {
+          "id": "sample_vuln_1",
+          "reference": "DEMO-SEC-001",
+          "title": "Synthetic component review",
+          "description": "This is not a real CVE or reported vulnerability.",
+          "component": "Illustrative TLS Component",
+          "severity": "medium",
+          "exploited": "unknown",
+          "status": "investigating",
+          "owner": "Example Security Team",
+          "remedy": "Verify applicable dependency version.",
+          "requirementIds": [
+            "VH-02"
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "id": "sample_release_1",
+          "date": "2026-11-19T10:00:00.000Z",
+          "label": "Fictional internal review",
+          "version": "1.0",
+          "requirements": {
+            "A1-01": {
+              "status": "partial",
+              "notes": "Initial threat model exists; remote dependency assurance not completed.",
+              "reviewer": "Example Reviewer"
+            },
+            "A1-05": {
+              "status": "gap",
+              "notes": "Administrative access hardening test evidence outstanding.",
+              "reviewer": "Example Reviewer"
+            }
+          },
+          "metrics": {
+            "total": 112,
+            "assessed": 2,
+            "coverage": 2
+          },
+          "riskCount": 2,
+          "actionOpen": 2,
+          "snapshotVersion": 1
+        }
+      ],
+      "components": [
+        {
+          "id": "demo-component-1",
+          "name": "Example Gateway Firmware",
+          "version": "1.0.0",
+          "supplier": "Example Engineering Ltd",
+          "licence": "Fictional proprietary sample",
+          "purl": "pkg:generic/example-gateway@1.0.0",
+          "dependsOn": [
+            "demo-component-2"
+          ],
+          "hashes": []
+        },
+        {
+          "id": "demo-component-2",
+          "name": "Illustrative TLS Component",
+          "version": "2.0.0-demo",
+          "supplier": "Example Components Ltd",
+          "licence": "Fictional sample",
+          "purl": "pkg:generic/example-tls@2.0.0-demo",
+          "dependsOn": [],
+          "hashes": []
+        }
+      ],
+      "documents": {
+        "architecture": {
+          "reference": "DEMO-ARCH-001"
+        },
+        "risk": {
+          "reference": "DEMO-RISK-001"
+        },
+        "sbom": {
+          "reference": "DEMO-SBOM-001"
+        },
+        "verification": {
+          "reference": "DEMO-TST-002"
+        }
+      },
+      "incident": {
+        "kind": "vulnerability",
+        "reference": "DEMO-CASE-001",
+        "trigger": "unknown",
+        "awareness": "2026-11-01T10:00:00.000Z",
+        "facts": "Fictional case for testing deadline calculations only."
+      },
       "legacy": {}
     }
   ]

@@ -1,7 +1,7 @@
 // Independent editorial checklist based on Regulation (EU) 2024/2847.
 // Prompts are assessor aids, NOT verbatim legislative requirements or a conformity decision.
 export const LAW='Regulation (EU) 2024/2847';
-export const GUIDANCE='European Commission, C(2026) 5252, Annex: CRA guidance (27 July 2026; non-binding)';
+export const GUIDANCE='European Commission CRA guidance, OJ C/2026/6013 (17 November 2026; non-binding)';
 const product = [
 ['A1-01','Risk-based cybersecurity','Annex I, Part I(1)','Document how security architecture and assurance activities reflect product risk.'],
 ['A1-02','Known exploitable vulnerabilities','Annex I, Part I(2)(a)','Record release checks and treatment of known exploitable vulnerabilities.'],
@@ -54,7 +54,7 @@ export const STATUS=['not-assessed','implemented','partial','gap','not-applicabl
 export const STATUS_LABEL={'not-assessed':'Not assessed','implemented':'Implemented','partial':'Partly implemented','gap':'Not implemented','not-applicable':'Not applicable'};
 export const REVIEWS=['unreviewed','referenced','reviewed','accepted','rejected'];
 export const STEPS=['open','in-progress','verification','closed'];
-export const REGULATORY_BASELINE=[{label:'Cyber Resilience Act',ref:'Regulation (EU) 2024/2847'},{label:'Important and critical product category descriptions',ref:'Implementing Regulation (EU) 2025/2392'},{label:'CRA implementation guidance',ref:'European Commission C(2026) 5252, Annex, 27 July 2026 (non-binding)'}];
+export const REGULATORY_BASELINE=[{label:'Cyber Resilience Act',ref:'Regulation (EU) 2024/2847'},{label:'Important and critical product category descriptions',ref:'Implementing Regulation (EU) 2025/2392'},{label:'CRA implementation guidance',ref:'Commission Communication C/2026/6013, OJ 17 November 2026 (non-binding)'}];
 // Original, non-regulatory internal maturity prompts. This is NOT an ENISA or standards-certified model.
 const maturityGroups={
  'Governance & accountability':[
@@ -93,7 +93,8 @@ const maturityGroups={
  'Reassess product security following material changes'
  ]
 };
-export const SME_CONTROLS=Object.entries(maturityGroups).flatMap(([domain,items],di)=>items.map((title,i)=>({id:`M-${di+1}${String(i+1).padStart(2,'0')}`,title,domain,target:4})));
+import {SME_CONTENT} from './sme-maturity-content.js';
+export const SME_CONTROLS=Object.entries(maturityGroups).flatMap(([domain,items],di)=>items.map((title,i)=>{const id=`M-${di+1}${String(i+1).padStart(2,'0')}`;return {id,title,domain,target:4,...SME_CONTENT[id]};}));
 export const SME_DOMAINS=Object.keys(maturityGroups);
 
 import {PROFESSIONAL_CONTROLS} from './professional-maturity.js';

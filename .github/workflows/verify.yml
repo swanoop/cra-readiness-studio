@@ -12,12 +12,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Test all application modules
+      - name: Run dependency-free unit tests
         run: npm test
-      - name: Syntax-check every JS source and test file
+      - name: Syntax-check JS
         run: |
-          for f in src/*.js tests/*.test.js; do
-            node --check "$f"
-          done
-      - name: Verify HTML and core assets exist
-        run: test -s index.html && test -s assets/styles.css && test -s src/app.js
+          find src tests -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Validate required static assets
+        run: test -s index.html && test -s assets/styles.css && test -s src/app.js && test -s src/pages.js
+  browser-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test tooling
+        run: npm install --no-audit --no-fund
+      - name: Install supported browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Run browser regression suite
+        run: npm run test:browser
+      - name: Upload browser artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

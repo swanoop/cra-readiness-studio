@@ -1,31 +1,37 @@
-# Architecture and trust boundaries
+# Architecture, persistence and trust boundaries
 
-**CRA Assurance Workbench** is a static ES-module application designed for local use. It does not require a backend, account, cloud API or analytics service.
+**Static ES-module application.** The browser loads local HTML, CSS and JavaScript without a backend or external application API. The GitHub Pages installation serves the same static files as a local Python HTTP server.
 
-## Modules
-| File | Purpose |
+| Module | Responsibility |
 | --- | --- |
-| `index.html`, `assets/styles.css` | Accessible application shell, compact navigation, focused assessment layout |
-| `src/app.js` | UI state, workflows, views and user input handling |
-| `src/data.js`, `src/regulatory-expanded.js` | Editorial CRA assessment catalogue, with stable IDs |
-| `src/professional-maturity.js` | Extended draft maturity catalogue; not a validated standard |
-| `src/engine.js` | Scope screening, assessment metrics, release-review checks and Article 14 dates |
-| `src/store.js` | Local workspace storage, backup schema validation and legacy import |
-| `src/secure-backup.js` | Portable backup encryption v2 / legacy v1 decryption |
-| `src/sbom.js` | Best-effort offline CycloneDX and SPDX package/relationship extraction |
-| `src/exports.js` | CSV escaping and A4 executive/detailed report templates |
-| `tests/` | Engine, parsing, encryption, export, and lightweight UI regression tests |
+| `src/app.js` | UI navigation, persistence coordination and event handlers |
+| `src/pages.js` | Page rendering and per-view controls, independent from controller |
+| `src/data.js`, `src/regulatory-expanded.js` | Stable editorial CRA assessment IDs and applicability |
+| `src/sme-maturity-content.js` | 25 individually authored core maturity rubrics |
+| `src/professional-maturity.js` | Experimental legacy 150-control rubric |
+| `src/engine.js` | Screening, evidence metrics, snapshots, risk flags and reporting dates |
+| `src/store.js` | Legacy localStorage, schema validation and backup conversion |
+| `src/vault.js` | IndexedDB encrypted persistence, explicit migration and read-back verification |
+| `src/password-dialog.js` | Masked and confirmed passphrase entry |
+| `src/secure-backup.js` | AES-GCM encryption, PBKDF2 and historic backup read |
+| `src/sbom.js` | Offline best-effort SBOM import |
+| `src/exports.js` | CSV injection protection and printable A4 reports |
+| `tests/` | Unit, no-network smoke and Playwright cross-browser regression |
 
-## Data and trust flow
-User-entered product data and uploaded SBOM → validation → in-memory app state → browser-local storage.
-The user may export ordinary JSON, password-protected JSON, CSV registers or print an HTML report to PDF.
+## Data flow
 
-Browser localStorage is plaintext. Password encryption applies to portable files only and is **not** equivalent to at-rest encryption of the live workspace. The application does not transmit records to the European Commission, ENISA or any vendor.
+1. User data enters in the browser and is validated or HTML-escaped before output.
+2. The legacy default persists the complete schema-2 workspace in localStorage.
+3. Explicit vault migration encrypts and writes the schema-2 workspace to IndexedDB, verifies decryption, then removes the localStorage key.
+4. Each subsequent save serialises an immutable snapshot and queues an authenticated AES-256-GCM write. Reload starts locked and requires passphrase entry.
+5. JSON, encrypted JSON, CSV or print output is initiated by the user. Plaintext exports must be protected separately.
 
-## Assurance boundary
-Assessment answers, imported SBOM metadata and evidence references are unverified user input until reviewed by an accountable assessor.
-The tool does not claim Annex VII completeness, standards conformity, live vulnerability enrichment or security certification.
-All printable reports include an assessment-draft disclaimer.
+The password is retained only in memory while the vault is unlocked. Browser crypto protects data **at rest**, not against same-origin malicious JavaScript, extensions, compromised endpoints or loss of origin storage. XSS protection, CSP, dependency integrity, browser updates and threat review remain important.
 
-## Future engineering
-IndexedDB project persistence with optional at-rest encryption, a formal domain content schema, independent editorial review, and a complete Playwright cross-browser/accessibility matrix remain planned.
+## Assessment snapshot semantics
+
+Version-2 snapshots capture independent copies of profile decisions, requirements, risk records, actions, evidence, vulnerability inventory, components, technical file references and incident data. Earlier one-page snapshots are read for compatibility and retain their reduced information. Snapshots are logical local records, **not digitally signed immutable audit logs**; the browser user can modify or replace the entire backup.
+
+## Known boundaries
+
+There is no user authentication, remote collaboration, server-side access control, CVE enrichment, standards-equivalence engine, automatic CRA conformity ruling or regulatory notification submission. The historical extended maturity rubric requires independent review. Browser test coverage is not an independent penetration test.
