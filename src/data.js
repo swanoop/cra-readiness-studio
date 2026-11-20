@@ -93,7 +93,8 @@ const maturityGroups={
  'Reassess product security following material changes'
  ]
 };
-export const SME_CONTROLS=Object.entries(maturityGroups).flatMap(([domain,items],di)=>items.map((title,i)=>({id:`M-${di+1}${String(i+1).padStart(2,'0')}`,title,domain,target:4})));
+import {SME_CONTENT} from './sme-maturity-content.js';
+export const SME_CONTROLS=Object.entries(maturityGroups).flatMap(([domain,items],di)=>items.map((title,i)=>{const id=`M-${di+1}${String(i+1).padStart(2,'0')}`;return {id,title,domain,target:4,...SME_CONTENT[id]};}));
 export const SME_DOMAINS=Object.keys(maturityGroups);
 
 import {PROFESSIONAL_CONTROLS} from './professional-maturity.js';
