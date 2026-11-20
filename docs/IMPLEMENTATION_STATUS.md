@@ -1,28 +1,31 @@
-# Implementation status — CRA Assurance Workbench 0.9.1-beta
+# Implementation status — CRA Assurance Workbench 0.11.0-beta
 
-## Implemented in this iteration
-- Guided workflow and simplified navigation, with advanced modules under an expandable section
-- Independent product and organisation branding; draft A4 executive or detailed report via browser print-to-PDF
-- CSV registers for requirements, evidence, risk, actions, vulnerabilities and SBOM
-- Rewritten 84 expanded editorial questions retaining original identifiers and legal references
-- Version 2 encrypted backup with authenticated KDF metadata and backward-compatible v1 decrypt
-- More complete offline SBOM component metadata and basic dependency extraction
-- UTC-normalised date storage for incident planner and calendar-month final-report handling
-- Updated official reference record, repository documentation and syntax/test coverage
+## Implemented in the development pull request
 
-## Preserved capabilities
-118 editorial CRA assessment prompts, 25 SME maturity practices, 150 draft extended controls,
-traceability, local records, technical file references, gap-to-action tracking and workspace import/export.
+- Masked passphrase modal, confirmation and basic strength screening; no `window.prompt` for encryption
+- Consistent sidebar labels and accurate role-scoped requirement counts/progress status
+- Formally published non-binding Commission CRA guidance baseline (OJ C/2026/6013)
+- Page rendering separated from the application controller
+- Node regression tests and three-browser Playwright workflow introduced
+- A fictional product showing risk, evidence, actions, vulnerabilities, SBOM components, incident case and release history
+- Expanded version-2 release snapshots preserving independent record copies
+- Explicit encrypted IndexedDB migration with decrypt verification and a locked-on-reload workspace
+- 25 original maturity questions, evidence suggestions and five individually authored assessment anchors
+- Legacy v1/v2 encrypted backup read compatibility retained
+- Browser demo documentation and maintenance/security guidance updated
 
-## Important limitations
-- **Legal:** All prompts and mappings remain editorial aids pending expert review; no automated conformity determination
-- **Maturity:** 750 generic extended rubric anchors remain draft. Do not represent these as a validated industry/ENISA model
-- **SBOM:** Partial extraction of common CycloneDX and SPDX JSON structures; no complete JSON Schema validation, no BSI conformance score, no CVE matching
-- **Storage:** The live workspace remains in browser localStorage. Encryption protects portable backup exports only; no IndexedDB or per-project at-rest encryption yet
-- **Reporting:** Timezone and deadline tests cover common cases, but legal triggers, exceptions and actual submissions need review
-- **QA:** Additional regression checks were added; full URL-served browser QA across Chromium, Firefox and WebKit, keyboard accessibility, axe and independent penetration testing remain outstanding
-- **Documentation:** The A4 report is a draft assessment record, not an Annex VII compliant package, Annex V declaration or other regulatory filing
+## Unresolved beta limitations and further validation
 
-## Release bar
-Remain in beta until independent product-security practitioners validate the editorial content and maturity rubrics,
-testing covers all supported browser/backup paths, and security/accessibility reviews pass.
+- Legal prompts, scope mappings and CRA category interpretation remain editorial and require independent subject-matter validation
+- The legacy 150-control maturity catalogue still uses experimental generic anchors
+- No verified one-to-one ENISA SME maturity mapping
+- IndexedDB is local and encrypted only while stored; unlocked browser memory and malicious same-origin JavaScript are outside its protection
+- Vault passphrase recovery is not available; browser/OS storage cleaning can destroy records
+- Snapshots are reproducible logical baselines, not cryptographically signed tamper-proof records
+- SBOM importer is best-effort; no complete standards-conformance validation or live vulnerability matching
+- CI browser coverage does not constitute independent penetration testing, accessibility certification or real-world legal assurance
+- The repository slug remains unchanged to preserve the GitHub Pages address
+
+## Intended release bar
+
+Merge only after automated unit and browser checks pass. Keep the **beta** designation until an independent security review, human regulatory mapping review and manual accessibility QA are complete.

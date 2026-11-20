@@ -3,7 +3,7 @@ export function passphraseAssessment(value) {
   if (typeof value !== 'string') return {ok:false, message:'Enter a passphrase.'};
   if (value.length < 16) return {ok:false, message:'Use at least 16 characters; a long, unique passphrase is recommended.'};
   if (value.length > 1024) return {ok:false, message:'Passphrase is too long.'};
-  if (/^(.)\\1{11,}$/u.test(value) || /(password|123456789|qwerty|letmein)/iu.test(value)) {
+  if (/^(.)\1{11,}$/u.test(value) || /(password|123456789|qwerty|letmein)/iu.test(value)) {
     return {ok:false, message:'Choose a less predictable passphrase.'};
   }
   return {ok:true, message:'Length requirement met. Use a unique, randomly generated passphrase.'};

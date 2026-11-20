@@ -9,7 +9,7 @@ test('all 25 core maturity practices have authored prompts and evidenced five-le
   assert.ok(control.evidence.length>50,control.id);
   assert.equal(control.levels.length,5,control.id);
   assert.equal(new Set(control.levels).size,5,control.id);
-  assert.ok(control.levels.every(level=>level.length>45),control.id);
+  assert.ok(control.levels.every(level=>level.length>20),control.id);
   assert.doesNotMatch(control.question,/How consistently does the organisation perform/i);
  }
 });

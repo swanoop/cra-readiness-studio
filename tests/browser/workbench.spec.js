@@ -2,7 +2,8 @@ import {test,expect} from '@playwright/test';
 import {resolve} from 'node:path';
 const sample=resolve('examples/industrial-gateway.json');
 async function importDemo(page){
-  await page.locator('[data-action="settings"]').first().click();
+  await page.goto('/#settings');
+  await expect(page.locator('#backup-import')).toHaveCount(1);
   page.once('dialog',d=>d.accept());
   await page.locator('#backup-import').setInputFiles(sample);
   await expect(page.locator('#content')).toContainText('Assessment overview');
@@ -81,4 +82,11 @@ test('encrypted IndexedDB migration removes plaintext records and locks on reloa
  await page.locator('dialog.password-dialog [name="secret"]').fill('Long-Unique-Vault-Passphrase-2026');
  await page.locator('dialog.password-dialog button[type="submit"]').click();
  await expect(page.locator('#content')).toContainText('New product 1');
+});
+
+test('narrow viewport layout does not have page-level horizontal overflow',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/');
+ await expect(page.locator('#content')).toBeVisible();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2)).toBe(true);
 });

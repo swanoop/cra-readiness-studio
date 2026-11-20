@@ -1,6 +1,6 @@
 {
   "name": "cra-assurance-workbench",
-  "version": "0.9.1-beta",
+  "version": "0.11.0-beta",
   "private": false,
   "type": "module",
   "description": "Local-first evidence-led EU Cyber Resilience Act product cybersecurity assessment",
