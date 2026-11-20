@@ -52,7 +52,9 @@ test('HTML in user-controlled profile fields is rendered as text',async({page})=
   await profile.locator('[name="name"]').fill('<img src=x onerror=alert(1)>');
   await profile.locator('[name="organisation"]').fill('<script>window.X=1</script>');
   await profile.locator('button[type="submit"]').click();
-  await expect(page.locator('#content')).toContainText('<img src=x onerror=alert(1)>');
+  await expect(profile.locator('[name="name"]')).toHaveValue('<img src=x onerror=alert(1)>');
+  await page.goto('/#overview');
+  await expect(page.locator('.assessment-intro')).toContainText('<img src=x onerror=alert(1)>');
   expect(await page.locator('#content img[src="x"]').count()).toBe(0);
   expect(await page.evaluate(()=>window.X)).toBeUndefined();
 });
@@ -81,7 +83,8 @@ test('encrypted IndexedDB migration removes plaintext records and locks on reloa
  await page.locator('[data-action="vault-unlock"]').click();
  await page.locator('dialog.password-dialog [name="secret"]').fill('Long-Unique-Vault-Passphrase-2026');
  await page.locator('dialog.password-dialog button[type="submit"]').click();
- await expect(page.locator('#content')).toContainText('New product 1');
+ await page.goto('/#overview');
+  await expect(page.locator('#content')).toContainText('New product 1');
 });
 
 test('narrow viewport layout does not have page-level horizontal overflow',async({page})=>{
