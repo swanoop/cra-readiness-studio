@@ -63,3 +63,22 @@ test('CSV export downloads a register and stays local',async({page})=>{
   await page.locator('[data-action="csv-export"]').first().click();
   expect((await dl).suggestedFilename()).toMatch(/csv$/);
 });
+
+test('encrypted IndexedDB migration removes plaintext records and locks on reload',async({page})=>{
+ await page.goto('/');
+ await page.locator('[data-action="new-product"]').first().click();
+ await page.goto('/#settings');
+ await page.locator('[data-action="vault-enable"]').click();
+ const modal=page.locator('dialog.password-dialog');
+ await modal.locator('[name="secret"]').fill('Long-Unique-Vault-Passphrase-2026');
+ await modal.locator('[name="again"]').fill('Long-Unique-Vault-Passphrase-2026');
+ await modal.locator('button[type="submit"]').click();
+ await expect(page.locator('#content')).toContainText('Encrypted IndexedDB');
+ expect(await page.evaluate(()=>localStorage.getItem('cra-readiness-studio-independent-v1'))).toBeNull();
+ await page.reload();
+ await expect(page.locator('#content')).toContainText('Encrypted workspace locked');
+ await page.locator('[data-action="vault-unlock"]').click();
+ await page.locator('dialog.password-dialog [name="secret"]').fill('Long-Unique-Vault-Passphrase-2026');
+ await page.locator('dialog.password-dialog button[type="submit"]').click();
+ await expect(page.locator('#content')).toContainText('New product 1');
+});
